@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Telkom SD-WAN | Inventory Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <img src="{{ url_for('static', filename='assets/img/logo.png') }}" alt="Telkom Logo" />
+      <div class="navbar-title">
+        <h1>SD-WAN Center</h1>
+        <span>Asset & Inventory Management</span>
+      </div>
+    </nav>
+
+    <div class="workspace">
+      <div class="card">
+        <div class="card-header">
+          <h2>Parameter Konfigurasi Hostname & Site ID</h2>
+        </div>
+        <div class="card-body">
+          <form id="deviceForm">
+            <div class="grid-form">
+              <div class="form-group">
+                <label>Platform</label>
+                <select id="platform" required>
+                  <option value="">-- Select --</option>
+                  <option value="01">01 - L2SWITCH</option>
+                  <option value="02">02 - SD-WAN</option>
+                  <option value="03">03 - VSAT IP</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Pabrikan</label>
+                <select id="pabrikan" required>
+                  <option value="">-- Select --</option>
+                  <option value="01">01 - CISCO</option>
+                  <option value="02">02 - VMWARE</option>
+                  <option value="03">03 - ZTE</option>
+                  <option value="04">04 - FIBERHOME</option>
+                  <option value="05">05 - HUGHES JUPITER</option>
+                  <option value="06">06 - RAISECOM</option>
+                  <option value="07">07 - NEWTEC</option>
+                  <option value="08">08 - FORTINET</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Kode Regional</label>
+                <input type="text" id="regional" placeholder="Ex: D2" required />
+              </div>
+              <div class="form-group">
+                <label>Kode STO</label>
+                <input type="text" id="sto" placeholder="Ex: KMY" required />
+              </div>
+              <div class="form-group">
+                <label>Nama Customer</label>
+                <input type="text" id="customer" placeholder="Ex: HERMINA" required />
+              </div>
+              <div class="form-group">
+                <label>Lokasi / Site</label>
+                <input type="text" id="lokasi" placeholder="Ex: KEMAYORAN" required />
+              </div>
+
+              <div class="form-group">
+                <label>Tipe Edge</label>
+                <select id="tipe_edge" required>
+                  <option value="">-- Select --</option>
+                  <option value="1">1 - STORE / LITTLE BRANCH</option>
+                  <option value="2">2 - REG BRANCH / AGGREGATE</option>
+                  <option value="3">3 - HO / DATA CENTER</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Kode Cust (3 Digit)</label>
+                <input type="text" id="kode_cust" placeholder="Ex: 001" required pattern="[0-9]{3}" />
+              </div>
+              <div class="form-group">
+                <label>Reg Site (Digit 5)</label>
+                <select id="kode_reg" required>
+                  <option value="">-- Select --</option>
+                  <option value="1">1 - REG 1</option>
+                  <option value="2">2 - REG 2</option>
+                  <option value="3">3 - REG 3</option>
+                  <option value="4">4 - REG 4</option>
+                  <option value="5">5 - REG 5</option>
+                  <option value="6">6 - REG 6</option>
+                  <option value="7">7 - REG 7</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Site Ke-N (4 Digit)</label>
+                <input type="text" id="kode_branch" placeholder="Ex: 0002" required pattern="[0-9]{4}" />
+              </div>
+              <div class="form-group form-group-full">
+                <label>Sistem IP (Management)</label>
+                <input type="text" id="ip_address" placeholder="Ex: 10.255.251.0" required />
+              </div>
+            </div>
+
+            <div class="btn-action">
+              <button type="submit" class="btn btn-primary">Generate & Inject to Database</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>Device Inventory Database</h2>
+          <button onclick="exportToExcel()" class="btn btn-export">
+            <svg viewBox="0 0 24 24">
+              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+            </svg>
+            Export .XLSX
+          </button>
+        </div>
+        <div class="card-body" style="padding: 0">
+          <div class="table-responsive">
+            <table id="inventoryTable">
+              <thead>
+                <tr>
+                  <th>Customer Name</th>
+                  <th>Site ID</th>
+                  <th>System Hostname</th>
+                  <th>Management IP</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </body>
+</html>

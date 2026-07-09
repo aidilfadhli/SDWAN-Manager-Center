@@ -1,0 +1,248 @@
+:root {
+  --telkom-red: #ee3124;
+  --telkom-red-dark: #cc291e;
+  --cisco-bg: #f5f6f7;
+  --cisco-card: #ffffff;
+  --cisco-border: #d4d7dc;
+  --cisco-text: #1d1d21;
+  --cisco-text-muted: #6a6b73;
+  --cisco-header: #ffffff;
+}
+
+body {
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  background-color: var(--cisco-bg);
+  color: var(--cisco-text);
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+/* Top Navigation / Header ala Cisco */
+.navbar {
+  background-color: var(--cisco-header);
+  border-bottom: 4px solid var(--telkom-red);
+  padding: 15px 30px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar img {
+  height: 80px; /* Logo Telkom Besar */
+  margin-right: 25px;
+}
+
+.navbar-title {
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid var(--cisco-border);
+  padding-left: 25px;
+}
+
+.navbar-title h1 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--cisco-text);
+  letter-spacing: -0.5px;
+}
+
+.navbar-title span {
+  font-size: 13px;
+  color: var(--cisco-text-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Main Content Workspace */
+.workspace {
+  padding: 30px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Cisco Style Cards */
+.card {
+  background-color: var(--cisco-card);
+  border: 1px solid var(--cisco-border);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+
+.card-header {
+  background-color: #fbfbfc;
+  border-bottom: 1px solid var(--cisco-border);
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cisco-text);
+}
+
+.card-body {
+  padding: 25px;
+}
+
+/* Grid Form Layout */
+.grid-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cisco-text-muted);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+/* Input Controls ala Enterprise */
+input,
+select {
+  padding: 10px 12px;
+  border: 1px solid var(--cisco-border);
+  border-radius: 3px;
+  font-family: inherit;
+  font-size: 14px;
+  background-color: var(--cisco-card);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--telkom-red);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(238, 49, 36, 0.15);
+}
+
+input::placeholder {
+  color: #a0a4a8;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-primary {
+  background-color: var(--telkom-red);
+  color: white;
+  min-width: 200px;
+}
+
+.btn-primary:hover {
+  background-color: var(--telkom-red-dark);
+}
+
+.btn-action {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+  border-top: 1px solid var(--cisco-border);
+}
+
+.btn-export {
+  background-color: transparent;
+  color: var(--cisco-text-muted);
+  border: 1px solid var(--cisco-border);
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn-export:hover {
+  background-color: #f0f0f0;
+  color: var(--cisco-text);
+}
+
+.btn-export svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+/* Data Table ala Konsol Cisco */
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--cisco-border);
+  padding: 12px 25px;
+  text-align: left;
+}
+
+th {
+  color: var(--cisco-text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  background-color: #fbfbfc;
+}
+
+td {
+  color: var(--cisco-text);
+}
+
+/* Font monospaced untuk identitas teknis agar terlihat profesional */
+.tech-id {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-weight: 600;
+  color: var(--telkom-red);
+}
+
+tr:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
