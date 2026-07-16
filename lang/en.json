@@ -49,11 +49,11 @@
   "modal_trash_title": "Recycle Bin",
   "modal_trash_desc": "The following items have been logically deleted and can be restored.",
   "stat_total": "Total Devices",
-  "stat_link_up": "Link UP",
-  "stat_link_down": "Link DOWN",
-  "stat_task_process": "Task ON PROCESS",
-  "stat_task_pending": "Task PENDING",
-  "stat_ncx_waitne": "NCX WAITING NE",
+  "stat_link_up": "Link DONE",
+  "stat_link_down": "Link CANCEL",
+  "stat_task_process": "Task IN PROCESS",
+  "stat_task_pending": "Task UNKNOWN",
+  "stat_ncx_waitne": "NCX PENDING",
   "stat_platform_dist": "Platform Distribution",
   "stat_pabrikan_dist": "Manufacturer Distribution",
   "confirm_delete_title": "Confirm Delete",
@@ -69,5 +69,8 @@
   "toast_error_duplicate_site": "Failed: Site ID is already in use.",
   "no_data": "No device data available.",
   "showing_data": "Showing",
-  "sync_from_sheets": "Sync from Sheets"
+  "sync_from_sheets": "Sync from Sheets",
+  "form_sid_sdwan": "SID SD-WAN",
+  "form_sid_conn": "SID Connectivity",
+  "form_taskname": "Taskname"
 }

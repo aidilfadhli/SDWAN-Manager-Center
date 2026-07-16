@@ -991,7 +991,7 @@ def sync_from_sheets_execute():
 @app.route('/lang/<lang_code>', methods=['GET'])
 def get_lang(lang_code):
     """GET /lang/<lang_code> → Mengembalikan berkas terjemahan JSON dari folder /lang."""
-    if lang_code not in ('id', 'en'):
+    if lang_code not in ('id', 'en', 'zh', 'es', 'hi', 'ar', 'ru'):
         return jsonify({'status': 'error', 'message': 'Bahasa tidak didukung'}), 400
     try:
         lang_path = os.path.join(app.root_path, 'lang', f'{lang_code}.json')

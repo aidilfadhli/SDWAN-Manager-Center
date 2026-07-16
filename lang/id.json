@@ -50,11 +50,11 @@
   "modal_trash_title": "Recycle Bin",
   "modal_trash_desc": "Data berikut telah dihapus secara logis dan dapat dipulihkan.",
   "stat_total": "Total Perangkat",
-  "stat_link_up": "Link UP",
-  "stat_link_down": "Link DOWN",
-  "stat_task_process": "Task ON PROCESS",
-  "stat_task_pending": "Task PENDING",
-  "stat_ncx_waitne": "NCX WAITING NE",
+  "stat_link_up": "Link DONE",
+  "stat_link_down": "Link CANCEL",
+  "stat_task_process": "Task IN PROCESS",
+  "stat_task_pending": "Task UNKNOWN",
+  "stat_ncx_waitne": "NCX PENDING",
   "stat_platform_dist": "Distribusi Platform",
   "stat_pabrikan_dist": "Distribusi Pabrikan",
   "confirm_delete_title": "Konfirmasi Hapus",
@@ -69,5 +69,8 @@
   "toast_error_duplicate_ip": "Gagal: Sistem IP sudah terpakai.",
   "toast_error_duplicate_site": "Gagal: Site ID sudah terpakai.",
   "no_data": "Tidak ada data perangkat.",
-  "showing_data": "Menampilkan"
+  "showing_data": "Menampilkan",
+  "form_sid_sdwan": "SID SD-WAN",
+  "form_sid_conn": "SID Connectivity",
+  "form_taskname": "Taskname"
 }

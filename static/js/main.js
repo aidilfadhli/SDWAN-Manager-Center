@@ -1629,6 +1629,16 @@ function updateSwitcherUI() {
   
   if (currentLang === 'id') {
     flagWrap.innerHTML = `<svg viewBox="0 0 3 2" class="flag-icon"><rect width="3" height="1" fill="#FF0000"/><rect y="1" width="3" height="1" fill="#FFFFFF"/></svg>`;
+  } else if (currentLang === 'zh') {
+    flagWrap.innerHTML = `<svg viewBox="0 0 900 600" class="flag-icon"><rect width="900" height="600" fill="#EE1C25"/><polygon points="150,85 170,147 235,147 182,185 202,247 150,209 97,247 117,185 64,147 130,147" fill="#FFFF00"/><polygon points="300,50 310,81 343,81 316,100 326,131 300,112 273,131 283,100 256,81 289,81" fill="#FFFF00"/><polygon points="360,140 370,171 403,171 376,190 386,221 360,202 333,221 343,190 316,171 349,171" fill="#FFFF00"/><polygon points="360,260 370,291 403,291 376,310 386,341 360,322 333,341 343,310 316,291 349,291" fill="#FFFF00"/><polygon points="300,350 310,381 343,381 316,400 326,431 300,412 273,431 283,400 256,381 289,381" fill="#FFFF00"/></svg>`;
+  } else if (currentLang === 'es') {
+    flagWrap.innerHTML = `<svg viewBox="0 0 3 2" class="flag-icon"><rect width="3" height="2" fill="#AA151B"/><rect y="0.5" width="3" height="1" fill="#F1BF00"/></svg>`;
+  } else if (currentLang === 'hi') {
+    flagWrap.innerHTML = `<svg viewBox="0 0 3 2" class="flag-icon"><rect width="3" height="0.666" fill="#FF9933"/><rect y="0.666" width="3" height="0.666" fill="#FFFFFF"/><rect y="1.333" width="3" height="0.666" fill="#138808"/><circle cx="1.5" cy="1" r="0.25" fill="none" stroke="#000080" stroke-width="0.05"/></svg>`;
+  } else if (currentLang === 'ar') {
+    flagWrap.innerHTML = `<svg viewBox="0 0 3 2" class="flag-icon"><rect width="3" height="2" fill="#006C35"/><rect x="0.5" y="0.9" width="2" height="0.2" fill="#FFFFFF"/></svg>`;
+  } else if (currentLang === 'ru') {
+    flagWrap.innerHTML = `<svg viewBox="0 0 3 2" class="flag-icon"><rect width="3" height="0.666" fill="#FFFFFF"/><rect y="0.666" width="3" height="0.666" fill="#0039A6"/><rect y="1.333" width="3" height="0.666" fill="#D52B1E"/></svg>`;
   } else {
     flagWrap.innerHTML = `<svg viewBox="0 0 50 30" class="flag-icon"><rect width="50" height="30" fill="#012169"/><path d="M0 0 L50 30 M50 0 L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0 L50 30 M50 0 L0 30" stroke="#C8102E" stroke-width="2"/><path d="M25 0 V30 M0 15 H50" stroke="#fff" stroke-width="10"/><path d="M25 0 V30 M0 15 H50" stroke="#C8102E" stroke-width="6"/></svg>`;
   }
