@@ -8,8 +8,8 @@ Aplikasi ini berfungsi sebagai pusat kontrol (dashboard) untuk mengelola data pe
 
 ## ✨ Fitur Utama
 
-- **Manajemen Data (CRUD) Cepat & Lengkap**: Tambah, edit, cari, dan hapus data perangkat dengan antarmuka yang sangat responsif. Mendukung validasi otomatis seperti pengecekan IP atau Site ID ganda.
-- **Sinkronisasi Google Sheets**: Integrasi langsung dengan Google Sheets. Kamu bisa menarik data terbaru dari Sheets atau mengirim perubahan data dari web kembali ke Sheets hanya dengan satu kali klik.
+- **Manajemen Data (CRUD) Cepat & Lengkap**: Tambah, edit, cari, dan hapus data perangkat dengan antarmuka yang sangat responsif. Mendukung validasi otomatis seperti pengecekan IP atau Site ID gAnda.
+- **Sinkronisasi Google Sheets**: Integrasi langsung dengan Google Sheets. Anda bisa menarik data terbaru dari Sheets atau mengirim perubahan data dari web kembali ke Sheets hanya dengan satu kali klik.
 - **Import & Export Data**: Mendukung kemudahan impor data dari file database SQLite (`.db`) maupun Excel (`.xlsx`), serta bisa mengekspor data yang ada menjadi format Excel.
 - **Recycle Bin (Tong Sampah)**: Data yang dihapus tidak langsung hilang (soft-delete), melainkan masuk ke *Recycle Bin* sehingga aman dari ketidaksengajaan dan bisa dipulihkan kapan saja.
 - **Statistik & Overview**: Dashboard merangkum metrik penting seperti total perangkat, status *link*, status pekerjaan, hingga distribusi merk/platform yang digunakan secara otomatis.
@@ -32,7 +32,7 @@ Aplikasi ini berfungsi sebagai pusat kontrol (dashboard) untuk mengelola data pe
 Berikut adalah panduan lengkap dari awal hingga aplikasi bisa berjalan di komputermu:
 
 ### 1. Persiapan Awal
-Pastikan kamu sudah menginstal **Python** (disarankan versi 3.8 ke atas) di komputermu. Jika belum, silakan unduh dan install dari [situs resmi Python](https://www.python.org/downloads/). Jangan lupa centang *'Add Python to PATH'* saat instalasi.
+Pastikan Anda sudah menginstal **Python** (disarankan versi 3.8 ke atas) di komputermu. Jika belum, silakan unduh dan install dari [situs resmi Python](https://www.python.org/downloads/). Jangan lupa centang *'Add Python to PATH'* saat instalasi.
 
 ### 2. Instalasi Kebutuhan Aplikasi (Requirements)
 1. Buka Terminal (Mac/Linux) atau Command Prompt / PowerShell (Windows).
@@ -52,18 +52,18 @@ Pastikan kamu sudah menginstal **Python** (disarankan versi 3.8 ke atas) di komp
 ### 3. Pengaturan Google Sheets (Opsional tapi penting untuk fitur Sync)
 Aplikasi ini butuh dua file konfigurasi agar bisa berkomunikasi dengan Google Sheets:
 - `credentials.json`: File rahasia dari Google Cloud Console (Service Account) yang memberikan izin akses ke API. Pastikan file ini ada di root folder aplikasi.
-- `config_sheets.txt`: File teks biasa yang di dalamnya hanya berisi **Spreadsheet ID** dari dokumen Google Sheets milikmu. (ID ini bisa kamu dapatkan dari URL Google Sheets yang panjang tersebut).
+- `config_sheets.txt`: File teks biasa yang di dalamnya hanya berisi **Spreadsheet ID** dari dokumen Google Sheets milikmu. (ID ini bisa Anda dapatkan dari URL Google Sheets yang panjang tersebut).
 
-*Catatan: Pastikan email dari Service Account (yang ada di dalam credentials.json) sudah kamu berikan akses "Editor" pada file Google Sheets kamu.*
+*Catatan: Pastikan email dari Service Account (yang ada di dalam credentials.json) sudah Anda berikan akses "Editor" pada file Google Sheets Anda.*
 
 ### 4. Menjalankan Aplikasi
-1. Di terminal yang sama, pastikan kamu masih berada di dalam folder proyek ini.
+1. Di terminal yang sama, pastikan Anda masih berada di dalam folder proyek ini.
 2. Jalankan perintah berikut:
    ```bash
    python app.py
    ```
 3. Jika berhasil, terminal akan menampilkan pesan bahwa server sedang berjalan (biasanya di port 5000).
-4. Buka aplikasi *browser* andalanmu (Chrome, Firefox, Safari, dll), lalu ketikkan alamat berikut di kolom URL:
+4. Buka aplikasi *browser* Andalanmu (Chrome, Firefox, Safari, dll), lalu ketikkan alamat berikut di kolom URL:
    ```
    http://127.0.0.1:5000
    ```
@@ -72,6 +72,6 @@ Aplikasi ini butuh dua file konfigurasi agar bisa berkomunikasi dengan Google Sh
 ---
 
 ## 📝 Tips Tambahan
-- Saat memasukkan data alamat IP, kamu tidak perlu repot mengetikkan titiknya. Sistem akan otomatis memformat ketikan angkamu (misal: mengetik `19216811` akan otomatis diubah menjadi `192.168.1.1`).
+- Saat memasukkan data alamat IP, Anda tidak perlu repot mengetikkan titiknya. Sistem akan otomatis memformat ketikan angAnda (misal: mengetik `19216811` akan otomatis diubah menjadi `192.168.1.1`).
 - Untuk melakukan kustomisasi *styling*, seluruh warna dan desain dapat diubah dengan mudah di dalam file `static/css/style.css`. 
-- Kalau kamu punya pertanyaan atau mengalami error, periksa kembali log di layar terminalmu untuk mencari tahu bagian mana yang bermasalah.
+- Kalau Anda punya pertanyaan atau mengalami error, periksa kembali log di layar terminalmu untuk mencari tahu bagian mana yang bermasalah.
