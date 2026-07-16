@@ -1,140 +1,916 @@
 <!doctype html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Telkom SD-WAN | Inventory Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-  </head>
-  <body>
-    <nav class="navbar">
-      <img src="{{ url_for('static', filename='assets/img/logo.png') }}" alt="Telkom Logo" />
-      <div class="navbar-title">
-        <h1>SD-WAN Center</h1>
-        <span>Asset & Inventory Management</span>
-      </div>
-    </nav>
 
-    <div class="workspace">
-      <div class="card">
-        <div class="card-header">
-          <h2>Parameter Konfigurasi Hostname & Site ID</h2>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SD-WAN Inventory Dashboard — Telkom Indibiz closing order management." />
+  <title>Telkom SD-WAN | Inventory Dashboard</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <img src="{{ url_for('static', filename='assets/img/logo.png') }}" alt="Telkom Logo" />
+    <div class="navbar-divider"></div>
+    <div class="navbar-title">
+      <h1 data-i18n="title">SD-WAN Center</h1>
+      <span data-i18n="subtitle">Asset &amp; Inventory Management — Telkom Indibiz</span>
+    </div>
+    <div class="navbar-spacer" style="flex-grow:1"></div>
+
+    <!-- Language Switcher -->
+    <div class="lang-switch-container">
+      <button class="btn-lang-toggle" onclick="toggleLangDropdown(event)" id="langToggleBtn" title="Switch Language">
+        <span class="active-flag-wrap" id="activeFlagWrap"></span>
+        <span class="active-lang-text" id="activeLangText">ID</span>
+        <svg class="dropdown-chevron" viewBox="0 0 24 24">
+          <path d="M7 10l5 5 5-5z" />
+        </svg>
+      </button>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-dropdown-item" id="lang-opt-id" onclick="changeLanguage('id')">
+          <svg viewBox="0 0 3 2" class="flag-icon">
+            <rect width="3" height="1" fill="#FF0000" />
+            <rect y="1" width="3" height="1" fill="#FFFFFF" />
+          </svg>
+          <span>Indonesia</span>
+        </button>
+        <button class="lang-dropdown-item" id="lang-opt-en" onclick="changeLanguage('en')">
+          <svg viewBox="0 0 50 30" class="flag-icon">
+            <rect width="50" height="30" fill="#012169" />
+            <path d="M0 0 L50 30 M50 0 L0 30" stroke="#fff" stroke-width="6" />
+            <path d="M0 0 L50 30 M50 0 L0 30" stroke="#C8102E" stroke-width="2" />
+            <path d="M25 0 V30 M0 15 H50" stroke="#fff" stroke-width="10" />
+            <path d="M25 0 V30 M0 15 H50" stroke="#C8102E" stroke-width="6" />
+          </svg>
+          <span>English</span>
+        </button>
+      </div>
+    </div>
+
+    <button id="themeToggle" class="btn-theme-toggle" onclick="toggleTheme()" title="Ubah Tema">
+      <svg class="sun-icon" viewBox="0 0 24 24">
+        <path
+          d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zm5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.02.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06a.996.996 0 0 0 0-1.41zm-12.37 12.37c-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06a.996.996 0 0 0 0-1.41z" />
+      </svg>
+      <svg class="moon-icon" viewBox="0 0 24 24" style="display:none">
+        <path
+          d="M12.3 22h-.1c-5.5 0-10-4.5-10-10 0-4.8 3.5-8.9 8.3-9.7.6-.1 1.1.4 1 1-.8 4.1.7 8.3 4.1 10.8 2.6 1.9 5.8 2.7 9 2.2.6-.1 1.1.4 1 1-.8 4.7-4.8 8-9.6 8.1l-3.7-.4z" />
+      </svg>
+    </button>
+  </nav>
+
+  <!-- ══ WORKSPACE ════════════════════════════════════════════ -->
+  <div class="workspace">
+
+    <!-- ── Card: Form Input ────────────────────────────────── -->
+    <div class="card">
+      <div class="card-header card-header-toggle" id="formToggle">
+        <div class="card-header-left">
+          <div class="card-icon">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z" />
+            </svg>
+          </div>
+          <h2 data-i18n="add_device">Input Data Closing Order SD-WAN</h2>
         </div>
+        <span class="toggle-icon">▼</span>
+      </div>
+
+      <div class="card-collapsible" id="formBody">
         <div class="card-body">
           <form id="deviceForm">
-            <div class="grid-form">
-              <div class="form-group">
-                <label>Platform</label>
-                <select id="platform" required>
-                  <option value="">-- Select --</option>
-                  <option value="01">01 - L2SWITCH</option>
-                  <option value="02">02 - SD-WAN</option>
-                  <option value="03">03 - VSAT IP</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Pabrikan</label>
-                <select id="pabrikan" required>
-                  <option value="">-- Select --</option>
-                  <option value="01">01 - CISCO</option>
-                  <option value="02">02 - VMWARE</option>
-                  <option value="03">03 - ZTE</option>
-                  <option value="04">04 - FIBERHOME</option>
-                  <option value="05">05 - HUGHES JUPITER</option>
-                  <option value="06">06 - RAISECOM</option>
-                  <option value="07">07 - NEWTEC</option>
-                  <option value="08">08 - FORTINET</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Kode Regional</label>
-                <input type="text" id="regional" placeholder="Ex: D2" required />
-              </div>
-              <div class="form-group">
-                <label>Kode STO</label>
-                <input type="text" id="sto" placeholder="Ex: KMY" required />
-              </div>
-              <div class="form-group">
-                <label>Nama Customer</label>
-                <input type="text" id="customer" placeholder="Ex: HERMINA" required />
-              </div>
-              <div class="form-group">
-                <label>Lokasi / Site</label>
-                <input type="text" id="lokasi" placeholder="Ex: KEMAYORAN" required />
-              </div>
 
-              <div class="form-group">
-                <label>Tipe Edge</label>
-                <select id="tipe_edge" required>
-                  <option value="">-- Select --</option>
-                  <option value="1">1 - STORE / LITTLE BRANCH</option>
-                  <option value="2">2 - REG BRANCH / AGGREGATE</option>
-                  <option value="3">3 - HO / DATA CENTER</option>
-                </select>
+            <div class="form-section">
+              <div class="grid-form">
+                <div class="form-group floating-group">
+                  <input type="text" id="order_sdwan" placeholder=" " />
+                  <label data-i18n="form_order">Order SD-WAN</label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="customer" placeholder=" " required />
+                  <label><span data-i18n="form_customer">Nama Pelanggan</span> <span
+                      class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="alias" placeholder=" " />
+                  <label data-i18n="form_alias">Alias (Opsional)</label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="sto" placeholder=" " required />
+                  <label><span data-i18n="form_sto">STO</span> <span class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="reg" placeholder=" " required />
+                  <label><span data-i18n="form_reg_code">REG (Kode Regional)</span> <span
+                      class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="lokasi" placeholder=" " required />
+                  <label><span data-i18n="form_lokasi">Lokasi / Site</span> <span class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group form-group-full">
+                  <textarea id="alamat" placeholder=" "></textarea>
+                  <label data-i18n="form_alamat">Alamat Lengkap</label>
+                </div>
               </div>
-              <div class="form-group">
-                <label>Kode Cust (3 Digit)</label>
-                <input type="text" id="kode_cust" placeholder="Ex: 001" required pattern="[0-9]{3}" />
+            </div>
+
+            <div class="form-section">
+              <div class="grid-form">
+                <div class="form-group floating-group">
+                  <select id="platform" required>
+                    <option value="" disabled selected hidden></option>
+                    <option value="01">01 — L2SWITCH</option>
+                    <option value="02">02 — SD-WAN</option>
+                    <option value="03">03 — VSAT IP</option>
+                  </select>
+                  <label><span data-i18n="form_platform">Platform</span> <span class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <select id="pabrikan" required>
+                    <option value="" disabled selected hidden></option>
+                    <option value="01">01 — CISCO</option>
+                    <option value="02">02 — VMWARE</option>
+                    <option value="03">03 — ZTE</option>
+                    <option value="04">04 — FIBERHOME</option>
+                    <option value="05">05 — HUGHES JUPITER</option>
+                    <option value="06">06 — RAISECOM</option>
+                    <option value="07">07 — NEWTEC</option>
+                    <option value="08">08 — FORTINET</option>
+                  </select>
+                  <label><span data-i18n="form_pabrikan">Pabrikan</span> <span class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <select id="type_edge" required>
+                    <option value="" disabled selected hidden></option>
+                    <option value="1">1 — STORE / LITTLE BRANCH</option>
+                    <option value="2">2 — REGIONAL BRANCH / AGGREGATE</option>
+                    <option value="3">3 — HO / DATA CENTER</option>
+                  </select>
+                  <label><span data-i18n="form_edge">Type Edge</span> <span class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="kode_cust" placeholder=" " required pattern="[0-9]{1,3}" maxlength="3" />
+                  <label><span data-i18n="form_cust_code">Kode Customer (Digit 2-4)</span> <span
+                      class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <select id="kode_reg" required>
+                    <option value="" disabled selected hidden></option>
+                    <option value="1">1 — REG 1</option>
+                    <option value="2">2 — REG 2</option>
+                    <option value="3">3 — REG 3</option>
+                    <option value="4">4 — REG 4</option>
+                    <option value="5">5 — REG 5</option>
+                    <option value="6">6 — REG 6</option>
+                    <option value="7">7 — REG 7</option>
+                  </select>
+                  <label><span data-i18n="form_reg_code">Kode Regional (Digit 5)</span> <span
+                      class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="kode_branch" placeholder=" " required pattern="[0-9]{1,4}" maxlength="4" />
+                  <label><span data-i18n="form_branch_code">No. Site (Digit 6-9)</span> <span
+                      class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="sistem_ip" placeholder=" " required />
+                  <label><span data-i18n="form_ip">Sistem IP</span> <span class="required-mark">*</span></label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="serial_number" placeholder=" " />
+                  <label data-i18n="form_serial">Serial Number (Opsional)</label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="sid_sdwan" placeholder=" " />
+                  <label>SID SD-WAN</label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="sid_connectivity" placeholder=" " />
+                  <label>SID Connectivity</label>
+                </div>
               </div>
-              <div class="form-group">
-                <label>Reg Site (Digit 5)</label>
-                <select id="kode_reg" required>
-                  <option value="">-- Select --</option>
-                  <option value="1">1 - REG 1</option>
-                  <option value="2">2 - REG 2</option>
-                  <option value="3">3 - REG 3</option>
-                  <option value="4">4 - REG 4</option>
-                  <option value="5">5 - REG 5</option>
-                  <option value="6">6 - REG 6</option>
-                  <option value="7">7 - REG 7</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Site Ke-N (4 Digit)</label>
-                <input type="text" id="kode_branch" placeholder="Ex: 0002" required pattern="[0-9]{4}" />
-              </div>
-              <div class="form-group form-group-full">
-                <label>Sistem IP (Management)</label>
-                <input type="text" id="ip_address" placeholder="Ex: 10.255.251.0" required />
+            </div>
+
+            <div class="form-section">
+              <div class="grid-form">
+                <div class="form-group floating-group">
+                  <select id="status_link">
+                    <option value="" disabled selected hidden></option>
+                    <option value="DONE">DONE</option>
+                    <option value="CANCEL">CANCEL</option>
+                    <option value="PENDING">PENDING</option>
+                    <option value="UNKNOWN">UNKNOWN</option>
+                  </select>
+                  <label data-i18n="form_link">Status Link</label>
+                </div>
+                <div class="form-group floating-group">
+                  <select id="status">
+                    <option value="" disabled selected hidden></option>
+                    <option value="DONE">DONE</option>
+                    <option value="IN PROCESS">IN PROCESS</option>
+                    <option value="CANCEL">CANCEL</option>
+                    <option value="UNKNOWN">UNKNOWN</option>
+                  </select>
+                  <label data-i18n="form_task">Status Pengerjaan</label>
+                </div>
+                <div class="form-group floating-group">
+                  <select id="status_ncx">
+                    <option value="" disabled selected hidden></option>
+                    <option value="DONE">DONE</option>
+                    <option value="IN PROCESS">IN PROCESS</option>
+                    <option value="PENDING">PENDING</option>
+                    <option value="UNKNOWN">UNKNOWN</option>
+                  </select>
+                  <label data-i18n="form_ncx">Status NCX</label>
+                </div>
+                <div class="form-group floating-group">
+                  <input type="text" id="taskname" placeholder=" " />
+                  <label>Taskname</label>
+                </div>
               </div>
             </div>
 
             <div class="btn-action">
-              <button type="submit" class="btn btn-primary">Generate & Inject to Database</button>
+              <button type="reset" class="btn btn-secondary" data-i18n="btn_cancel">Reset Form</button>
+              <button type="submit" id="submitBtn" class="btn btn-primary">
+                <svg viewBox="0 0 24 24">
+                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                </svg>
+                <span data-i18n="btn_save">Generate &amp; Simpan ke Database</span>
+              </button>
             </div>
           </form>
         </div>
       </div>
+    </div><!-- /form card -->
 
-      <div class="card">
-        <div class="card-header">
-          <h2>Device Inventory Database</h2>
-          <button onclick="exportToExcel()" class="btn btn-export">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <div class="card-icon">
             <svg viewBox="0 0 24 24">
-              <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+              <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z" />
             </svg>
-            Export .XLSX
+          </div>
+          <h2 data-i18n="modal_detail_title">Device Inventory Database</h2>
+          <span id="rowCount" style="font-size:11px;color:var(--muted);margin-left:6px;font-weight:500"></span>
+        </div>
+        <div class="dashboard-controls">
+          <div class="search-wrap" id="searchWrap">
+            <svg class="search-icon" viewBox="0 0 24 24">
+              <path
+                d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+            </svg>
+            <input type="text" id="searchInput" data-i18n-placeholder="search_placeholder"
+              placeholder="Cari pelanggan, IP, hostname..." />
+            <div class="search-spinner" id="searchSpinner"></div>
+            <button class="search-clear-btn" id="searchClearBtn" onclick="clearSearch()" title="Hapus Pencarian">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+              </svg>
+            </button>
+            <kbd class="search-shortcut-hint">/</kbd>
+          </div>
+          <button id="statsBtn" onclick="openStatsModal()" class="btn btn-secondary">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+            </svg>
+            <span data-i18n="stats">Statistik</span>
           </button>
         </div>
-        <div class="card-body" style="padding: 0">
-          <div class="table-responsive">
-            <table id="inventoryTable">
-              <thead>
-                <tr>
-                  <th>Customer Name</th>
-                  <th>Site ID</th>
-                  <th>System Hostname</th>
-                  <th>Management IP</th>
-                </tr>
-              </thead>
-              <tbody id="tableBody"></tbody>
-            </table>
+      </div>
+      <div class="card-body" style="padding:0">
+        <div class="table-responsive">
+          <table id="inventoryTable">
+            <thead>
+              <tr>
+                <th style="min-width:140px" onclick="handleSort('nama_pelanggan')" data-i18n="th_customer">Nama
+                  Pelanggan<span class="sort-indicator" id="sort-nama_pelanggan"></span></th>
+                <th style="min-width:110px" onclick="handleSort('alias')" data-i18n="th_alias">Alias<span
+                    class="sort-indicator" id="sort-alias"></span></th>
+                <th style="min-width:110px" onclick="handleSort('site_id')" data-i18n="th_site_id">Site ID<span
+                    class="sort-indicator" id="sort-site_id"></span></th>
+                <th style="min-width:200px" onclick="handleSort('hostname')" data-i18n="th_hostname">Hostname<span
+                    class="sort-indicator" id="sort-hostname"></span></th>
+                <th style="min-width:110px" onclick="handleSort('sistem_ip')" data-i18n="th_ip">Sistem IP<span
+                    class="sort-indicator" id="sort-sistem_ip"></span></th>
+                <th style="min-width:80px" onclick="handleSort('sto')" data-i18n="th_sto_reg">STO/REG<span
+                    class="sort-indicator" id="sort-sto"></span></th>
+                <th style="min-width:90px" onclick="handleSort('status_link')" data-i18n="th_link">Status Link<span
+                    class="sort-indicator" id="sort-status_link"></span></th>
+                <th style="min-width:100px" onclick="handleSort('status')" data-i18n="th_task">Status Pengerjaan<span
+                    class="sort-indicator" id="sort-status"></span></th>
+                <th style="min-width:100px" onclick="handleSort('status_ncx')" data-i18n="th_ncx">Status NCX<span
+                    class="sort-indicator" id="sort-status_ncx"></span></th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+          <div id="tableEmpty" class="empty-state" style="display:none">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20 6h-2.18c.07-.44.18-.88.18-1.37C18 2.52 15.48 1 12 1S6 2.52 6 4.63c0 .49.11.93.18 1.37H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8-3c1.9 0 4 .96 4 2.63C16 6.71 14.21 7 12 7S8 6.71 8 5.63C8 3.96 10.1 3 12 3zm8 17H4V8h16v12z" />
+            </svg>
+            <p data-i18n="no_data">Belum ada data di database.</p>
+          </div>
+        </div>
+        <!-- Pagination Controls -->
+        <div class="pagination-container" id="paginationContainer" style="display:none">
+          <div class="pagination-info">
+            <span><span data-i18n="showing_data">Menampilkan</span> <strong id="paginatedRange">0-0</strong> <span
+                data-i18n="no_data" style="display:none">dari</span><span style="margin:0 4px">/</span><strong
+                id="totalCount">0</strong> <span data-i18n="total_records">record</span></span>
+            <select id="pageSizeSelect" class="pagination-size-select" onchange="changePageSize(this.value)">
+              <option value="50" selected>50 per halaman</option>
+              <option value="100">100 per halaman</option>
+              <option value="250">250 per halaman</option>
+              <option value="500">500 per halaman</option>
+            </select>
+          </div>
+          <div class="pagination-controls" id="paginationControls">
+            <!-- Dinamis via main.js -->
           </div>
         </div>
       </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-  </body>
+  </div><!-- /workspace -->
+
+  <!-- ══ EDIT TOOLBAR (Fixed Bottom) ════════════════════════ -->
+  <div class="edit-toolbar" id="editToolbar">
+    <span class="edit-toolbar-label"><span data-i18n="edit_mode">Edit Mode</span> <span
+        data-i18n="th_link">Aktif</span></span>
+    <span class="pending-count" id="pendingCount" style="display:none"></span>
+    <div class="edit-toolbar-spacer"></div>
+    <button id="undoBtn" class="btn btn-secondary" onclick="undoEdit()" disabled>
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" />
+      </svg>
+      <span data-i18n="btn_undo">Undo</span>
+    </button>
+    <button id="redoBtn" class="btn btn-secondary" onclick="redoEdit()" disabled>
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M18.4 10.6C16.55 8.99 14.15 8 11.5 8c-4.65 0-8.58 3.03-9.96 7.22L3.9 16c1.05-3.19 4.05-5.5 7.6-5.5 1.95 0 3.73.72 5.12 1.88L13 16h9V7l-3.6 3.6z" />
+      </svg>
+      <span data-i18n="btn_redo">Redo</span>
+    </button>
+    <button id="discardBtn" class="btn btn-secondary" onclick="discardEdits()">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" />
+      </svg>
+      <span data-i18n="btn_cancel">Discard</span>
+    </button>
+    <button id="saveAllBtn" class="btn btn-success" onclick="saveAllEdits()" disabled>
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z" />
+      </svg>
+      <span data-i18n="btn_save_changes">Simpan Semua</span>
+    </button>
+  </div>
+
+  <!-- ══ MODAL: Recycle Bin ════════════════════════════════════ -->
+  <div class="modal-overlay" id="trashModalOverlay">
+    <div class="modal" role="dialog" aria-modal="true" style="max-width: 800px;">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; fill: var(--muted);">
+            <path
+              d="M3 6h18v2H3V6zm2 4h14v11c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V10zm3 2v7h2v-7H8zm4 0v7h2v-7h-2zm4 0v7h2v-7h-2zM9 4V3c0-.55.45-1 1-1h4c.55 0 1 .45 1 1v1h5v2H4V4h5z" />
+          </svg>
+          <h3 data-i18n="modal_trash_title">Recycle Bin</h3>
+        </div>
+        <button class="modal-close" onclick="closeModal('trashModalOverlay')">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 0 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding:0;">
+        <div style="padding:12px 20px; font-size:12px; color:var(--muted); border-bottom:1px solid var(--border-lt)"
+          data-i18n="modal_trash_desc">
+          Data berikut telah dihapus secara logis dan dapat dipulihkan.
+        </div>
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th data-i18n="th_hostname">Hostname</th>
+                <th data-i18n="th_ip">Sistem IP</th>
+                <th data-i18n="form_customer">Nama Pelanggan</th>
+                <th style="text-align:right" data-i18n="th_action">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="trashTableBody">
+              <!-- Trash rows render here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content: space-between;">
+        <button class="btn btn-secondary" style="color: var(--red); border-color: transparent;" onclick="emptyTrash()">
+          <svg viewBox="0 0 24 24"
+            style="width: 14px; height: 14px; margin-right:4px; margin-bottom:-2px; fill:currentColor">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+          </svg>
+          <span data-i18n="btn_empty_trash">Kosongkan Trash</span>
+        </button>
+        <button class="btn btn-secondary" onclick="closeModal('trashModalOverlay')" data-i18n="btn_close">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Detail ════════════════════════════════════════ -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 data-i18n="modal_detail_title">Detail Perangkat</h3>
+        <button class="modal-close" onclick="closeModal('modalOverlay')">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 0 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-grid">
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_order">Order SD-WAN</span><span
+              class="modal-field-value" id="m-order"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_customer">Nama Pelanggan</span><span
+              class="modal-field-value" id="m-customer"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_alias">Alias</span><span
+              class="modal-field-value" id="m-alias"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="th_sto_reg">STO / REG</span><span
+              class="modal-field-value"><span id="m-sto"></span> / <span id="m-reg"></span></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_lokasi">Lokasi</span><span
+              class="modal-field-value" id="m-lokasi"></span></div>
+          <div class="modal-field modal-field-full"><span class="modal-field-label"
+              data-i18n="form_alamat">Alamat</span><span class="modal-field-value" id="m-alamat"></span></div>
+          <hr class="modal-divider" />
+          <div class="modal-field modal-field-full"><span class="modal-field-label" data-i18n="th_hostname">Hostname
+              (Auto-Generated)</span><span class="modal-field-value mono" id="m-hostname"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="th_site_id">Site ID
+              (Auto-Generated)</span><span class="modal-field-value mono" id="m-siteid"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_ip">Sistem IP</span><span
+              class="modal-field-value mono" id="m-ip"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_edge">Type Edge</span><span
+              class="modal-field-value" id="m-type"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_serial">Serial Number</span><span
+              class="modal-field-value mono" id="m-serial"></span></div>
+          <hr class="modal-divider" />
+          <div class="modal-field"><span class="modal-field-label">SID SD-WAN</span><span class="modal-field-value mono"
+              id="m-sid-sdwan"></span></div>
+          <div class="modal-field"><span class="modal-field-label">SID Connectivity</span><span
+              class="modal-field-value mono" id="m-sid-conn"></span></div>
+          <div class="modal-field modal-field-full"><span class="modal-field-label">Taskname</span><span
+              class="modal-field-value" id="m-taskname"></span></div>
+          <hr class="modal-divider" />
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_link">Status Link</span><span
+              class="modal-field-value" id="m-status-link"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_task">Status Pengerjaan</span><span
+              class="modal-field-value" id="m-status"></span></div>
+          <div class="modal-field"><span class="modal-field-label" data-i18n="form_ncx">Status NCX</span><span
+              class="modal-field-value" id="m-status-ncx"></span></div>
+          <div class="modal-field"><span class="modal-field-label">Created At</span><span class="modal-field-value"
+              id="m-created"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Edit Detail ═══════════════════════════════════ -->
+  <div class="modal-overlay" id="editDetailOverlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 data-i18n="modal_edit_title">Edit Detail Perangkat</h3>
+        <button class="modal-close" onclick="closeModal('editDetailOverlay')">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 0 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="max-height: 70vh;">
+        <form id="editDetailForm" onsubmit="saveModalEdit(event)">
+          <input type="hidden" id="ed-id" />
+
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+            <div class="form-group">
+              <label data-i18n="form_order">Order SD-WAN</label>
+              <input type="text" id="ed-order_sdwan" />
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_customer">Nama Pelanggan</span> <span class="required-mark">*</span></label>
+              <input type="text" id="ed-customer" required oninput="triggerModalRegen()" />
+            </div>
+            <div class="form-group">
+              <label data-i18n="form_alias">Alias</label>
+              <input type="text" id="ed-alias" />
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_lokasi">Lokasi / Site</span> <span class="required-mark">*</span></label>
+              <input type="text" id="ed-lokasi" required oninput="triggerModalRegen()" />
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_sto">STO</span> <span class="required-mark">*</span></label>
+              <input type="text" id="ed-sto" required oninput="triggerModalRegen()" />
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_reg_code">REG (Kode Regional)</span> <span
+                  class="required-mark">*</span></label>
+              <input type="text" id="ed-reg" required oninput="triggerModalRegen()" />
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label data-i18n="form_alamat">Alamat Lengkap</label>
+              <textarea id="ed-alamat" style="min-height:50px"></textarea>
+            </div>
+          </div>
+
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px">
+            <div class="form-group">
+              <label><span data-i18n="form_platform">Platform</span> <span class="required-mark">*</span></label>
+              <select id="ed-platform" required onchange="triggerModalRegen()">
+                <option value="01">01 — L2SWITCH</option>
+                <option value="02">02 — SD-WAN</option>
+                <option value="03">03 — VSAT IP</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_pabrikan">Pabrikan</span> <span class="required-mark">*</span></label>
+              <select id="ed-pabrikan" required onchange="triggerModalRegen()">
+                <option value="01">01 — CISCO</option>
+                <option value="02">02 — VMWARE</option>
+                <option value="03">03 — ZTE</option>
+                <option value="04">04 — FIBERHOME</option>
+                <option value="05">05 — HUGHES JUPITER</option>
+                <option value="06">06 — RAISECOM</option>
+                <option value="07">07 — NEWTEC</option>
+                <option value="08">08 — FORTINET</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_edge">Type Edge</span> <span class="required-mark">*</span></label>
+              <select id="ed-type_edge" required onchange="triggerModalRegen()">
+                <option value="1">1 — STORE / LITTLE BRANCH</option>
+                <option value="2">2 — REGIONAL BRANCH / AGGREGATE</option>
+                <option value="3">3 — HO / DATA CENTER</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_cust_code">Kode Customer (Digit 2-4 Site ID)</span> <span
+                  class="required-mark">*</span></label>
+              <input type="text" id="ed-kode_cust" required pattern="[0-9]{1,3}" maxlength="3"
+                oninput="triggerModalRegen()" />
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_reg_code">Kode Regional (Digit 5 Site ID)</span> <span
+                  class="required-mark">*</span></label>
+              <select id="ed-kode_reg" required onchange="triggerModalRegen()">
+                <option value="1">1 — REG 1</option>
+                <option value="2">2 — REG 2</option>
+                <option value="3">3 — REG 3</option>
+                <option value="4">4 — REG 4</option>
+                <option value="5">5 — REG 5</option>
+                <option value="6">6 — REG 6</option>
+                <option value="7">7 — REG 7</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_branch_code">Nomor Site/Branch (Digit 6-9 Site ID)</span> <span
+                  class="required-mark">*</span></label>
+              <input type="text" id="ed-kode_branch" required pattern="[0-9]{1,4}" maxlength="4"
+                oninput="triggerModalRegen()" />
+            </div>
+            <div class="form-group">
+              <label><span data-i18n="form_ip">Sistem IP</span> <span class="required-mark">*</span></label>
+              <input type="text" id="ed-sistem_ip" required />
+            </div>
+            <div class="form-group">
+              <label data-i18n="form_serial">Serial Number</label>
+              <input type="text" id="ed-serial_number" />
+            </div>
+            <div class="form-group">
+              <label>SID SD-WAN</label>
+              <input type="text" id="ed-sid_sdwan" />
+            </div>
+            <div class="form-group">
+              <label>SID Connectivity</label>
+              <input type="text" id="ed-sid_connectivity" />
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label>Taskname</label>
+              <input type="text" id="ed-taskname" />
+            </div>
+          </div>
+
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+            <div class="form-group">
+              <label data-i18n="form_link">Status Link</label>
+              <select id="ed-status_link">
+                <option value="">— Pilih —</option>
+                <option value="DONE">DONE</option>
+                <option value="CANCEL">CANCEL</option>
+                <option value="PENDING">PENDING</option>
+                <option value="UNKNOWN">UNKNOWN</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label data-i18n="form_task">Status Pengerjaan</label>
+              <select id="ed-status">
+                <option value="">— Pilih —</option>
+                <option value="DONE">DONE</option>
+                <option value="IN PROCESS">IN PROCESS</option>
+                <option value="CANCEL">CANCEL</option>
+                <option value="UNKNOWN">UNKNOWN</option>
+              </select>
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label data-i18n="form_ncx">Status NCX</label>
+              <select id="ed-status_ncx">
+                <option value="">— Pilih —</option>
+                <option value="DONE">DONE</option>
+                <option value="IN PROCESS">IN PROCESS</option>
+                <option value="PENDING">PENDING</option>
+                <option value="UNKNOWN">UNKNOWN</option>
+              </select>
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label>Auto-Generated Hostname</label>
+              <input type="text" id="ed-hostname" style="background:#f3f4f6;font-family:monospace;font-weight:700"
+                readonly />
+            </div>
+            <div class="form-group" style="grid-column:1/-1">
+              <label>Auto-Generated Site ID</label>
+              <input type="text" id="ed-site_id" style="background:#f3f4f6;font-family:monospace;font-weight:700"
+                readonly />
+            </div>
+          </div>
+
+          <div
+            style="display:flex;justify-content:flex-end;gap:8px;margin-top:20px;padding-top:12px;border-top:1px solid var(--border-lt)">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('editDetailOverlay')"
+              data-i18n="btn_cancel">Batal</button>
+            <button type="submit" class="btn btn-success" data-i18n="btn_save_changes">Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Import ════════════════════════════════════════ -->
+  <div class="modal-overlay" id="importOverlay">
+    <div class="modal modal-sm" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 data-i18n="import_data">Import Database</h3>
+        <button class="modal-close" onclick="closeModal('importOverlay')">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 0 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="import-dropzone" id="importDropzone">
+          <input type="file" id="importFileInput" accept=".db,.xlsx" onchange="handleImportFile(event)" />
+          <svg viewBox="0 0 24 24">
+            <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
+          </svg>
+          <p data-i18n="no_data" style="display:none">Klik atau drag &amp; drop file di sini</p>
+          <p>Klik atau drag &amp; drop file di sini</p>
+          <span>Format yang didukung: <strong>.db</strong> (SQLite) dan <strong>.xlsx</strong> (Excel)</span>
+        </div>
+        <div id="importPreview" class="import-preview" style="display:none">
+          <div class="import-preview-header" id="importPreviewHeader"></div>
+          <div class="import-preview-body" id="importPreviewBody"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('importOverlay')" data-i18n="btn_cancel">Batal</button>
+        <button class="btn btn-primary" id="importConfirmBtn" onclick="confirmImport()" disabled>
+          <svg viewBox="0 0 24 24">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+          </svg>
+          <span data-i18n="btn_save">Import Sekarang</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Statistics ════════════════════════════════════ -->
+  <div class="modal-overlay" id="statsOverlay">
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-header">
+        <h3 data-i18n="modal_stats_title">Statistik &amp; Overview Perangkat</h3>
+        <button class="modal-close" onclick="closeModal('statsOverlay')">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 0 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z" />
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px">
+          <div style="background:#f3f4f6;padding:16px;border-radius:6px;text-align:center;border:1px solid #e5e7eb">
+            <div style="font-size:11px;font-weight:600;color:#6b7280;text-transform:uppercase;letter-spacing:.5px"
+              data-i18n="stat_total">Total Perangkat</div>
+            <div style="font-size:32px;font-weight:700;color:var(--text);margin-top:4px" id="s-total-devices">0</div>
+          </div>
+          <div style="background:#eff6ff;padding:16px;border-radius:6px;text-align:center;border:1px solid #dbeafe">
+            <div style="font-size:11px;font-weight:600;color:#2563eb;text-transform:uppercase;letter-spacing:.5px">Cisco
+            </div>
+            <div style="font-size:32px;font-weight:700;color:#1e40af;margin-top:4px" id="s-total-cisco">0</div>
+          </div>
+          <div style="background:#fef2f2;padding:16px;border-radius:6px;text-align:center;border:1px solid #fee2e2">
+            <div style="font-size:11px;font-weight:600;color:#dc2626;text-transform:uppercase;letter-spacing:.5px">
+              Fortinet</div>
+            <div style="font-size:32px;font-weight:700;color:#991b1b;margin-top:4px" id="s-total-fortinet">0</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:12px">
+          <div>
+            <h4 style="margin:0 0 10px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px"
+              data-i18n="stat_pabrikan_dist">Berdasarkan Pabrikan</h4>
+            <div id="stats-pabrikan-list" style="display:flex;flex-direction:column;gap:6px"></div>
+          </div>
+          <div>
+            <h4 style="margin:0 0 10px;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px"
+              data-i18n="form_edge">Berdasarkan Tipe Edge</h4>
+            <div id="stats-edge-list" style="display:flex;flex-direction:column;gap:6px"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('statsOverlay')" data-i18n="btn_close">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ MODAL: Confirm Delete ═════════════════════════════════ -->
+  <div class="modal-overlay" id="confirmOverlay">
+    <div class="modal modal-sm" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="modal-header" style="border-bottom:none;padding-bottom:8px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div
+            style="width:34px;height:34px;border-radius:50%;background:var(--red-s-lt);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:var(--red-s)">
+              <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+            </svg>
+          </div>
+          <h3 id="confirmTitle" style="font-size:15px;margin:0" data-i18n="confirm_delete_title">Konfirmasi Hapus</h3>
+        </div>
+      </div>
+      <div class="modal-body" style="padding-top:4px;padding-bottom:16px">
+        <p id="confirmMessage" style="margin:0;color:var(--muted);font-size:13px;line-height:1.6"></p>
+      </div>
+      <div class="modal-footer" style="gap:8px">
+        <button class="btn btn-secondary" onclick="closeModal('confirmOverlay')" id="confirmCancelBtn"
+          data-i18n="btn_cancel">Tidak, Batal</button>
+        <button class="btn btn-primary" id="confirmOkBtn" style="background:var(--red-s)">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+          </svg>
+          <span data-i18n="confirm_delete_btn">Ya, Hapus</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FLOATING ACTION TOOLBAR (FAB) ════════════════════════ -->
+  <div class="fab-container" id="fabContainer">
+    <button class="fab-trigger" id="fabTrigger" onclick="toggleFabMenu()" title="Peralatan & Aksi">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.488.488 0 0 0-.59.22L2.74 8.87a.49.49 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 0 0-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+      </svg>
+    </button>
+    <div class="fab-menu" id="fabMenu">
+      <button onclick="openTrashModal(); closeFabMenu();" class="btn btn-secondary fab-btn" style="color: var(--red);">
+        <svg viewBox="0 0 24 24" style="fill:currentColor">
+          <path
+            d="M3 6h18v2H3V6zm2 4h14v11c0 1.1-.9 2-2 2H7c-1.1 0-2-.9-2-2V10zm3 2v7h2v-7H8zm4 0v7h2v-7h-2zm4 0v7h2v-7h-2zM9 4V3c0-.55.45-1 1-1h4c.55 0 1 .45 1 1v1h5v2H4V4h5z" />
+        </svg>
+        <span data-i18n="recycle_bin">Recycle Bin</span>
+      </button>
+      <button id="editModeBtn" onclick="toggleEditMode(); closeFabMenu();" class="btn btn-secondary fab-btn">
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+        </svg>
+        <span data-i18n="edit_mode">Edit Mode</span>
+      </button>
+      <button onclick="openImportModal(); closeFabMenu();" class="btn btn-secondary fab-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
+        </svg>
+        <span data-i18n="import_data">Import Data</span>
+      </button>
+      <button onclick="exportToExcel(); closeFabMenu();" class="btn btn-secondary fab-btn">
+        <svg viewBox="0 0 24 24">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z" />
+        </svg>
+        <span data-i18n="export_xlsx">Export .XLSX</span>
+      </button>
+      <button onclick="initSyncFromSheets(); closeFabMenu();" class="btn btn-secondary fab-btn" id="syncFromSheetsBtn" style="color:#6366f1;">
+        <svg viewBox="0 0 24 24" style="fill:currentColor">
+          <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+        </svg>
+        <span data-i18n="sync_from_sheets">Sync dari Sheets</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ TOAST CONTAINER ══════════════════════════════════════ -->
+  <div id="toast-container"></div>
+
+  <!-- ══ CUSTOM CONTEXT MENU ══════════════════════════════════ -->
+  <div id="customContextMenu" class="context-menu">
+    <div class="context-menu-item" id="contextViewBtn">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z" />
+      </svg>
+      <span data-i18n="modal_detail_title">View Details</span>
+    </div>
+    <div class="context-menu-item" id="contextEditBtn">
+      <svg viewBox="0 0 24 24">
+        <path
+          d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+      </svg>
+      <span data-i18n="modal_edit_title">Edit Details</span>
+    </div>
+    <div class="context-menu-item delete" id="contextDeleteBtn">
+      <svg viewBox="0 0 24 24">
+        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
+      </svg>
+      <span data-i18n="confirm_delete_btn">Delete</span>
+    </div>
+  </div>
+
+  <!-- ══ SYNC FROM SHEETS MODAL ══════════════════════════════════ -->
+  <div id="syncSheetsOverlay" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-card" style="max-width:460px">
+      <div class="modal-header" id="syncSheetsHeader">
+        <div style="display:flex;align-items:center;gap:10px">
+          <svg viewBox="0 0 24 24" style="width:20px;height:20px;flex-shrink:0;fill:currentColor">
+            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+          </svg>
+          <span id="syncSheetsTitle">Sinkronisasi dari Google Sheets</span>
+        </div>
+        <button class="modal-close" onclick="closeModal('syncSheetsOverlay')">
+          <svg viewBox="0 0 24 24"><path d="M18.3 5.71a1 1 0 0 0-1.41 0L12 10.59 7.11 5.7A1 1 0 0 0 5.7 7.11L10.59 12 5.7 16.89a1 1 0 0 0 1.41 1.41L12 13.41l4.89 4.89a1 1 0 0 0 1.41-1.41L13.41 12l4.89-4.89a1 1 0 0 0 0-1.4z"/></svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding:20px 24px">
+        <!-- Loading state -->
+        <div id="syncSheetsLoading" style="text-align:center;padding:24px 0">
+          <div class="spinner" style="width:32px;height:32px;border-width:3px;margin:0 auto 12px"></div>
+          <p style="color:var(--muted);font-size:13px">Membaca data dari Google Sheets…</p>
+        </div>
+        <!-- Info state -->
+        <div id="syncSheetsInfo" style="display:none">
+          <div id="syncSheetsWarningBanner" style="display:none;background:rgba(239,68,68,0.08);border:1.5px solid rgba(239,68,68,0.35);border-radius:8px;padding:12px 14px;margin-bottom:16px;display:flex;gap:10px;align-items:flex-start">
+            <svg viewBox="0 0 24 24" style="width:18px;height:18px;flex-shrink:0;fill:#ef4444;margin-top:1px">
+              <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+            </svg>
+            <div>
+              <div style="font-weight:700;color:#ef4444;font-size:13px;margin-bottom:4px">PERINGATAN KEHILANGAN DATA!</div>
+              <div id="syncWarningText" style="font-size:12px;color:var(--text);line-height:1.5"></div>
+            </div>
+          </div>
+          <div id="syncSheetsStats" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px"></div>
+          <p id="syncSheetsDesc" style="font-size:13px;color:var(--muted);line-height:1.6;margin:0"></p>
+        </div>
+      </div>
+      <div class="modal-footer" id="syncSheetsFooter" style="display:none;justify-content:flex-end;gap:8px">
+        <button class="btn btn-secondary" onclick="closeModal('syncSheetsOverlay')">Batal</button>
+        <button id="syncSheetsConfirmBtn" class="btn btn-primary" onclick="executeSyncFromSheets()">
+          <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;margin-right:4px;margin-bottom:-2px">
+            <path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46A7.93 7.93 0 0 0 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74A7.93 7.93 0 0 0 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/>
+          </svg>
+          <span id="syncSheetsConfirmText">Sinkronkan Sekarang</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
 </html>

@@ -20,3 +20,11 @@ ENV/
 # OS metadata
 .DS_Store
 Thumbs.db
+
+# Google API Credentials & Spreadsheet Configuration
+credentials.json
+config_sheets.txt
+
+# Excel & Scrap Data Files
+*.xlsx
+*.xls
